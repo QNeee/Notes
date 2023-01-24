@@ -2,7 +2,7 @@ import { useState } from "react"
 export const Form = (props) => {
     const [modal, setModal] = useState({ isToggle: false });
     const date = new Date();
-    const time = (date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds());
+    const time = (date.getHours() + ':' + date.getMinutes());
     const [form, setForm] = useState({ name: '', date: time, text: '', isEdit: false });
     const handleClick = (e) => {
         setModal({ isToggle: !modal.isToggle })

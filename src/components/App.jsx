@@ -41,7 +41,8 @@ export const App = () => {
     }
     const findNode = nodes.find(item => item.name.toLowerCase() === e.name.toLowerCase())
     if (!findNode) {
-      setNodes([...nodes, newNode])
+      setNodes([...nodes, newNode]);
+      setFilter('');
       return setStatus(stateMachine.ADD);
     }
     return alert(`${e.name} is already in list`);
@@ -50,6 +51,7 @@ export const App = () => {
     setNode([e]);
   }
   const onClickDelete = (e) => {
+
     setNode([]);
     setStatus(stateMachine.DELETE);
     return setNodes(nodes.filter(item => item.id !== e))
@@ -59,19 +61,23 @@ export const App = () => {
   }
   const redactorSubmit = (e) => {
     const index = nodes.findIndex(item => item.id === e.id);
-    const redacteredNode = {
-      id: nanoid(),
-      name: e.name,
-      date: e.date,
-      text: e.text,
-      isEdit: true,
+    const findNode = nodes.find(item => item.name.toLowerCase() === e.name.toLowerCase())
+    if (!findNode) {
+      const redacteredNode = {
+        id: nanoid(),
+        name: e.name,
+        date: e.date,
+        text: e.text,
+        isEdit: true,
+      }
+      nodes.splice(index, 1);
+      setNodes([...nodes, redacteredNode]);
+      setNode([]);
+      setModal({ isOpen: false });
+      setStatus(stateMachine.REDACTERED);
+      return setFilter('');
     }
-    nodes.splice(index, 1);
-    setNodes([...nodes, redacteredNode]);
-    setNode([]);
-    setModal({ isOpen: false });
-    setStatus(stateMachine.REDACTERED);
-    return setFilter('');
+    return alert(`${e.name} is already in list`);
   }
   const onChangeFilter = (value) => {
     setFilter(value);
@@ -79,15 +85,18 @@ export const App = () => {
   const getFilteredNodes = () => {
     return nodes.filter(item => item.name.toLowerCase().includes(filter.toLowerCase()))
   }
+  const onClose = (e) => {
+    setModal({ isOpen: false });
+  }
   return (
     <>
       <Header value={filter} onChange={onChangeFilter} />
       <Form onSubmit={handleSubmit} />
       <Container>
         <Sidebar nodes={getFilteredNodes()} onClick={onClick} />
-        <Notes node={node} onClickDelete={onClickDelete} onClickRedactor={onClickRedactor} />
+        {nodes.length !== 0 ? <Notes node={node} onClickDelete={onClickDelete} onClickRedactor={onClickRedactor} /> : <h1>Create Note</h1>}
       </Container>
-      {modal.isOpen && <Redactor onSubmit={redactorSubmit} node={node} />}
+      {modal.isOpen && <Redactor onClose={onClose} onSubmit={redactorSubmit} node={node} />}
     </>
   );
 };

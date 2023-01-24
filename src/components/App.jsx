@@ -6,15 +6,18 @@ import { nanoid } from 'nanoid'
 import { useEffect } from "react";
 import { Container } from "./App.styled";
 import { Notes } from "./Notes/Notes";
+import { Redactor } from "./Redactor/Redactor";
 export const App = () => {
   const KEY = 'local-key';
   const stateMachine = {
     ADD: 'add',
-    DELETE: 'delete'
+    DELETE: 'delete',
+    REDACTERED: "redactered"
   }
   const [status, setStatus] = useState('');
   const [nodes, setNodes] = useState([]);
   const [node, setNode] = useState([]);
+  const [modal, setModal] = useState({ isOpen: false });
   useEffect(() => {
     const localData = JSON.parse(localStorage.getItem(KEY)) || [];
     if (localData.length > 0) {
@@ -22,17 +25,17 @@ export const App = () => {
     }
   }, [])
   useEffect(() => {
-    if (status === stateMachine.ADD || status === stateMachine.DELETE) {
+    if (status === stateMachine.ADD || status === stateMachine.DELETE || status === stateMachine.REDACTERED) {
       return localStorage.setItem(KEY, JSON.stringify(nodes));
     }
   }, [status, nodes])
-
   const handleSubmit = (e) => {
     const newNode = {
       id: nanoid(),
       name: e.name,
       date: e.date,
-      text: e.text
+      text: e.text,
+      isEdit: false,
     }
     const findNode = nodes.find(item => item.name.toLowerCase() === e.name.toLowerCase())
     if (!findNode) {
@@ -44,15 +47,38 @@ export const App = () => {
   const onClick = (e) => {
     setNode([e]);
   }
-  console.log(node);
+  const onClickDelete = (e) => {
+    setNode([]);
+    setStatus(stateMachine.DELETE);
+    return setNodes(nodes.filter(item => item.id !== e))
+  }
+  const onClickRedactor = (e) => {
+    setModal({ isOpen: true })
+  }
+  const redactorSubmit = (e) => {
+    const index = nodes.findIndex(item => item.id === e.id);
+    const redacteredNode = {
+      id: nanoid(),
+      name: e.name,
+      date: e.date,
+      text: e.text,
+      isEdit: true,
+    }
+    nodes.splice(index, 1);
+    setNodes([...nodes, redacteredNode]);
+    setNode([]);
+    setModal({ isOpen: false });
+    return setStatus(stateMachine.REDACTERED);
+  }
   return (
     <>
       <Header />
       <Form onSubmit={handleSubmit} />
       <Container>
         <Sidebar nodes={nodes} onClick={onClick} />
-        <Notes node={node} />
+        <Notes node={node} onClickDelete={onClickDelete} onClickRedactor={onClickRedactor} />
       </Container>
+      {modal.isOpen && <Redactor onSubmit={redactorSubmit} node={node} />}
     </>
   );
 };

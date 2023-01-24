@@ -1,8 +1,9 @@
 import { useState } from "react"
 export const Form = (props) => {
     const [modal, setModal] = useState({ isToggle: false });
-    const date = new Date().getTime();
-    const [form, setForm] = useState({ name: '', date: date, text: '', isEdit: false });
+    const date = new Date();
+    const time = (date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds());
+    const [form, setForm] = useState({ name: '', date: time, text: '', isEdit: false });
     const handleClick = (e) => {
         setModal({ isToggle: !modal.isToggle })
     }
@@ -16,7 +17,7 @@ export const Form = (props) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         props.onSubmit(form);
-        setForm({ name: '', date: date, text: '', isEdit: false });
+        setForm({ name: '', date: time, text: '', isEdit: false });
         return setModal({ isToggle: false });
     }
     return <div>

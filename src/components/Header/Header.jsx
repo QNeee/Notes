@@ -1,12 +1,9 @@
-import { useState } from "react"
-export const Header = () => {
-    const [inputValue, setInputValue] = useState('');
-    const handleInput = (e) => {
-        setInputValue(e.target.value);
-    }
+
+export const Header = ({ value, onChange }) => {
     return <header>
         <div>
-            <input type="text" name="text" value={inputValue} onChange={handleInput} />
-        </div>
+            <label>Search Node
+                <input type="text" value={value} onChange={(e) => onChange(e.target.value)} />
+            </label> </div>
     </header>
 }

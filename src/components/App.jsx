@@ -18,6 +18,7 @@ export const App = () => {
   const [nodes, setNodes] = useState([]);
   const [node, setNode] = useState([]);
   const [modal, setModal] = useState({ isOpen: false });
+  const [filter, setFilter] = useState('');
   useEffect(() => {
     const localData = JSON.parse(localStorage.getItem(KEY)) || [];
     if (localData.length > 0) {
@@ -30,6 +31,7 @@ export const App = () => {
     }
   }, [status, nodes])
   const handleSubmit = (e) => {
+
     const newNode = {
       id: nanoid(),
       name: e.name,
@@ -68,14 +70,21 @@ export const App = () => {
     setNodes([...nodes, redacteredNode]);
     setNode([]);
     setModal({ isOpen: false });
-    return setStatus(stateMachine.REDACTERED);
+    setStatus(stateMachine.REDACTERED);
+    return setFilter('');
+  }
+  const onChangeFilter = (value) => {
+    setFilter(value);
+  }
+  const getFilteredNodes = () => {
+    return nodes.filter(item => item.name.toLowerCase().includes(filter.toLowerCase()))
   }
   return (
     <>
-      <Header />
+      <Header value={filter} onChange={onChangeFilter} />
       <Form onSubmit={handleSubmit} />
       <Container>
-        <Sidebar nodes={nodes} onClick={onClick} />
+        <Sidebar nodes={getFilteredNodes()} onClick={onClick} />
         <Notes node={node} onClickDelete={onClickDelete} onClickRedactor={onClickRedactor} />
       </Container>
       {modal.isOpen && <Redactor onSubmit={redactorSubmit} node={node} />}

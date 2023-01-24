@@ -91,7 +91,7 @@ export const App = () => {
   return (
     <>
       <Header value={filter} onChange={onChangeFilter} />
-      <Form onSubmit={handleSubmit} />
+      {!modal.isOpen && <Form onSubmit={handleSubmit} />}
       <Container>
         <Sidebar nodes={getFilteredNodes()} onClick={onClick} />
         {nodes.length !== 0 ? <Notes node={node} onClickDelete={onClickDelete} onClickRedactor={onClickRedactor} /> : <h1>Create Note</h1>}

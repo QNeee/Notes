@@ -1,6 +1,6 @@
 
 import { useState } from "react"
-
+import { Button, TextField } from '@mui/material/';
 export const Redactor = (props) => {
     const date = new Date();
     const time = (date.getHours() + ':' + date.getMinutes());
@@ -25,14 +25,10 @@ export const Redactor = (props) => {
     }
     return <div>
         {!isOpen.formIsOpen && <form onSubmit={handleSubmit}>
-            <label>Имя заметки
-                <input type="text" name="name" onChange={handleInput} value={form.name} />
-            </label>
-            <label>Текст заметки
-                <input type="text" name="text" onChange={handleInput} value={form.text} />
-            </label>
-            <button type="submit">edit</button>
-            <button onClick={onClickCancel} type="button">Cancel</button>
+            <TextField label="Имя заметки" id="outlined-basic" variant="outlined" type="text" name="name" onChange={handleInput} value={form.name} />
+            <TextField label="Текс заметки" id="outlined-basic" variant="outlined" type="text" name="text" onChange={handleInput} value={form.text} />
+            <Button type="submit" variant="contained">edit</Button>
+            <Button variant="contained" onClick={onClickCancel} type="button">Cancel</Button>
         </form>}
     </div>
 }

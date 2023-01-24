@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { Button, TextField } from '@mui/material/';
 export const Form = (props) => {
     const [modal, setModal] = useState({ isToggle: false });
     const date = new Date();
@@ -21,14 +22,14 @@ export const Form = (props) => {
         return setModal({ isToggle: false });
     }
     return <div>
-        <button type="button" onClick={handleClick}>Add Node</button>
+        <Button type="button" variant="contained" onClick={handleClick}>Add Node</Button>
         {modal.isToggle && <form onSubmit={handleSubmit}>
-            <label>Имя заметки
-                <input type="text" name="name" onChange={handleInput} value={form.name} />
-            </label>
-            <label>Текст заметки
-                <input type="text" name="text" onChange={handleInput} value={form.text} />
-            </label>
-            <button type="submit">Add Note</button>
+
+            <TextField label="Имя заметки" id="outlined-basic" variant="outlined" type="text" name="name" onChange={handleInput} value={form.name} />
+
+
+            <TextField label="Текс заметки" id="outlined-basic" variant="outlined" type="text" name="text" onChange={handleInput} value={form.text} />
+
+            <Button type="submit" variant="contained">Add Note</Button>
         </form>}</div>
 }

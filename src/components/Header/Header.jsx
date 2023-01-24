@@ -1,9 +1,7 @@
-
+import { TextField } from '@mui/material/';
 export const Header = ({ value, onChange }) => {
     return <header>
         <div>
-            <label>Search Node
-                <input type="text" value={value} onChange={(e) => onChange(e.target.value)} />
-            </label> </div>
+            <TextField label="Найти заметку" id="outlined-basic" variant="outlined" type="text" value={value} onChange={(e) => onChange(e.target.value)} /> </div>
     </header>
 }

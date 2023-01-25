@@ -114,9 +114,7 @@ export const App = () => {
   const redactorSubmit = (e) => {
     e.preventDefault();
     if (e.target.name.value === '') return alert("fill Name field")
-    const index = nodes.findIndex(item => item.id === form.id);
-    nodes.splice(index, 1);
-    setNodes([...nodes, form])
+    setNodes([...nodes.filter(item => item.id !== form.id), form]);
     setIsopen({ redacteredForm: false });
     setStatus(stateMachine.EDITED);
     setForm({ id: '', name: '', date: time, text: '', isEdit: false });

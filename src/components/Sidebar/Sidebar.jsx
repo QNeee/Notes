@@ -5,6 +5,6 @@ export const Sidebar = () => {
     const { getFilteredNodes, onClick } = useContext(Context);
     return <Aside>
         {getFilteredNodes().length > 0 ? getFilteredNodes().map(item => <NodeContainer onClick={(e) => onClick(item)} key={item.id}><h1>{item.name}</h1>
-            <p>{item.text}</p><p>{item.date}</p>{item.isEdit && <p>edited</p>}</NodeContainer>) : <div>No nodes</div>}
+            <p>{item.text}</p><p>{item.date}</p>{item.isEdit && <p>edited</p>}</NodeContainer>) : <h1>No notes</h1>}
     </Aside>
 }

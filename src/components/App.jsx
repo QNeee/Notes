@@ -4,12 +4,13 @@ import { HeaderLayout } from "./Header/HeaderLayout";
 import { Sidebar } from "./Sidebar/Sidebar";
 import { nanoid } from 'nanoid'
 import { useEffect } from "react";
-import { Container } from "./App.styled";
+import { Container, H1 } from "./App.styled";
 import { Notes } from "./Notes/Notes";
 import { Redactor } from "./Redactor/Redactor";
 import { Context } from "./context";
 import { Button } from '@mui/material/';
 import { DeleteModal } from "./DeleteModal/DeleteModal";
+
 export const App = () => {
   const KEY = 'local-key';
   const stateMachine = {
@@ -77,7 +78,8 @@ export const App = () => {
       setFilter('');
       setStatus(stateMachine.ADD);
       setForm({ name: '', date: time, text: '', isEdit: false });
-      return setModalHeader({ isToggle: false });
+      setModalHeader({ isToggle: false });
+      return setNode([]);
     }
     return alert(`${e.name} is already in list`);
   }
@@ -106,15 +108,11 @@ export const App = () => {
   const redactorSubmit = (e) => {
     e.preventDefault();
     const index = nodes.findIndex(item => item.id === form.id);
-    const findNode = nodes.find(item => item.name.toLowerCase() === form.name.toLowerCase())
-    if (!findNode) {
-      nodes.splice(index, 1);
-      setNodes([...nodes, form])
-      setIsopen({ redacteredForm: false });
-      setStatus(stateMachine.REDACTERED);
-      return setNode([]);
-    }
-    return alert(`${form.name} is already in list`);
+    nodes.splice(index, 1);
+    setNodes([...nodes, form])
+    setIsopen({ redacteredForm: false });
+    setStatus(stateMachine.REDACTERED);
+    return setNode([]);
   }
   const onChangeFilter = (value) => {
     setFilter(value);
@@ -133,7 +131,7 @@ export const App = () => {
       <Context.Provider value={{ filter, onChangeFilter }}>
         <HeaderLayout />
       </Context.Provider>
-      <Button type="button" variant="contained" onClick={handleClick}>Add Node</Button>
+      <Button type="button" variant="contained" onClick={handleClick}>Create Note</Button>
       <Context.Provider value={{ handleSubmit, handleInput, form, handleClick, modalHeader, onClose, redactorSubmit, node }}>
         {modalHeader.isToggle && <Form />}
         {isOpen.redacteredForm && <Redactor />}
@@ -141,7 +139,7 @@ export const App = () => {
       <Context.Provider value={{ getFilteredNodes, onClick, node, onClickDelete, onClickRedactor }}>
         <Container>
           <Sidebar />
-          {nodes.length !== 0 ? <Notes /> : <h1>Create Note</h1>}
+          {nodes.length !== 0 ? <Notes /> : <H1>Create Note</H1>}
         </Container>
       </Context.Provider>
     </>

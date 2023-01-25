@@ -16,7 +16,7 @@ export const App = () => {
   const stateMachine = {
     ADD: 'add',
     DELETE: 'delete',
-    REDACTERED: "redactered"
+    EDITED: "edited"
   }
   const date = new Date();
   const time = (date.getHours() + ':' + date.getMinutes());
@@ -36,7 +36,7 @@ export const App = () => {
     }
   }, [])
   useEffect(() => {
-    if (status === stateMachine.ADD || status === stateMachine.DELETE || status === stateMachine.REDACTERED) {
+    if (status === stateMachine.ADD || status === stateMachine.DELETE || status === stateMachine.EDITED) {
       return localStorage.setItem(KEY, JSON.stringify(nodes));
     }
   }, [status, nodes])
@@ -89,6 +89,7 @@ export const App = () => {
   }
   const onClick = (e) => {
     setNode([e]);
+    setIsopen({ redacteredForm: false });
   }
   const onClickDelete = (e) => {
     setIsModalOpen(true);
@@ -116,7 +117,7 @@ export const App = () => {
     nodes.splice(index, 1);
     setNodes([...nodes, form])
     setIsopen({ redacteredForm: false });
-    setStatus(stateMachine.REDACTERED);
+    setStatus(stateMachine.EDITED);
     setForm({ id: '', name: '', date: time, text: '', isEdit: false });
     return setNode([]);
   }

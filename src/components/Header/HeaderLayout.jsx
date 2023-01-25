@@ -22,5 +22,5 @@ export const HeaderLayout = () => {
         size={[0, 48]}
     >
         <Layout><Header style={headerStyle}>  <div>
-            <TextField label="Найти заметку" id="outlined-basic" variant="outlined" type="text" value={filter} onChange={(e) => onChangeFilter(e.target.value)} /> </div></Header></Layout></Space>
+            <TextField label="Find note by name" id="outlined-basic" variant="outlined" type="text" value={filter} onChange={(e) => onChangeFilter(e.target.value)} /> </div></Header></Layout></Space>
 }

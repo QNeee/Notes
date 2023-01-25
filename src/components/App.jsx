@@ -47,6 +47,7 @@ export const App = () => {
     setNode([]);
     setStatus(stateMachine.DELETE);
     setIsopen({ redacteredForm: false });
+    setModalHeader({ isToggle: false });
     return setNodes(nodes.filter(item => item.id !== itemToDelete))
   };
 
@@ -67,6 +68,7 @@ export const App = () => {
   }
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (e.target.name.value === '') return alert("fill Name field");
     const newNode = {
       id: nanoid(),
       name: form.name,
@@ -83,7 +85,7 @@ export const App = () => {
       setNode([]);
       return setStatus(stateMachine.ADD);
     }
-    return alert(`${e.name} is already in list`);
+    return alert(`${form.name} is already in list`);
   }
   const onClick = (e) => {
     setNode([e]);
@@ -109,6 +111,7 @@ export const App = () => {
   }
   const redactorSubmit = (e) => {
     e.preventDefault();
+    if (e.target.name.value === '') return alert("fill Name field")
     const index = nodes.findIndex(item => item.id === form.id);
     nodes.splice(index, 1);
     setNodes([...nodes, form])

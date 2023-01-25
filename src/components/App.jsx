@@ -46,6 +46,7 @@ export const App = () => {
     setIsModalOpen(false);
     setNode([]);
     setStatus(stateMachine.DELETE);
+    setIsopen({ redacteredForm: false });
     return setNodes(nodes.filter(item => item.id !== itemToDelete))
   };
 

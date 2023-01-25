@@ -60,6 +60,7 @@ export const App = () => {
     }))
   }
   const handleClick = (e) => {
+    setForm({ id: '', name: '', date: time, text: '', isEdit: false })
     setModalHeader({ isToggle: !modalHeader.isToggle });
     setIsopen({ redacteredForm: false });
   }
@@ -76,10 +77,10 @@ export const App = () => {
     if (!findNode) {
       setNodes([...nodes, newNode]);
       setFilter('');
-      setStatus(stateMachine.ADD);
       setForm({ name: '', date: time, text: '', isEdit: false });
       setModalHeader({ isToggle: false });
-      return setNode([]);
+      setNode([]);
+      return setStatus(stateMachine.ADD);
     }
     return alert(`${e.name} is already in list`);
   }
@@ -112,6 +113,7 @@ export const App = () => {
     setNodes([...nodes, form])
     setIsopen({ redacteredForm: false });
     setStatus(stateMachine.REDACTERED);
+    setForm({ id: '', name: '', date: time, text: '', isEdit: false });
     return setNode([]);
   }
   const onChangeFilter = (value) => {

@@ -9,6 +9,7 @@ import { Notes } from "./Notes/Notes";
 import { Redactor } from "./Redactor/Redactor";
 import { Context } from "./context";
 import { Button } from '@mui/material/';
+import { DeleteModal } from "./DeleteModal/DeleteModal";
 export const App = () => {
   const KEY = 'local-key';
   const stateMachine = {
@@ -16,15 +17,17 @@ export const App = () => {
     DELETE: 'delete',
     REDACTERED: "redactered"
   }
+  const date = new Date();
+  const time = (date.getHours() + ':' + date.getMinutes());
   const [status, setStatus] = useState('');
   const [nodes, setNodes] = useState([]);
   const [node, setNode] = useState([]);
   const [filter, setFilter] = useState('');
-  const date = new Date();
-  const time = (date.getHours() + ':' + date.getMinutes());
-  const [form, setForm] = useState({ name: '', date: time, text: '', isEdit: false });
+  const [form, setForm] = useState({ id: '', name: '', date: time, text: '', isEdit: false });
   const [modalHeader, setModalHeader] = useState({ isToggle: false });
   const [isOpen, setIsopen] = useState({ redacteredForm: false });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState('');
   useEffect(() => {
     const localData = JSON.parse(localStorage.getItem(KEY)) || [];
     if (localData.length > 0) {
@@ -36,6 +39,18 @@ export const App = () => {
       return localStorage.setItem(KEY, JSON.stringify(nodes));
     }
   }, [status, nodes])
+
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+    setNode([]);
+    setStatus(stateMachine.DELETE);
+    return setNodes(nodes.filter(item => item.id !== itemToDelete))
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   const handleInput = (e) => {
     const { name, value } = e.target;
     setForm(prev => ({
@@ -70,36 +85,35 @@ export const App = () => {
     setNode([e]);
   }
   const onClickDelete = (e) => {
-    setNode([]);
-    setStatus(stateMachine.DELETE);
-    return setNodes(nodes.filter(item => item.id !== e))
+    setIsModalOpen(true);
+    setItemToDelete(e);
   }
   const onClickRedactor = (e) => {
+    const nodeToEditName = node.map(item => item.name).join("");
+    const nodeToEditText = node.map(item => item.text).join("");
+    const nodeToEditId = node.map(item => item.id).join("");
+    const nodeToEdit = {
+      id: nodeToEditId,
+      date: form.date,
+      name: nodeToEditName,
+      text: nodeToEditText,
+      isEdit: true,
+    }
+    setForm(nodeToEdit);
     setIsopen({ redacteredForm: true });
     setModalHeader({ isToggle: false });
   }
   const redactorSubmit = (e) => {
     e.preventDefault();
-
-    const index = nodes.findIndex(item => item.id === e.id);
+    const index = nodes.findIndex(item => item.id === form.id);
     const findNode = nodes.find(item => item.name.toLowerCase() === form.name.toLowerCase())
     if (!findNode) {
-      const redacteredNode = {
-        id: nanoid(),
-        name: form.name,
-        date: form.date,
-        text: form.text,
-        isEdit: true,
-      }
       nodes.splice(index, 1);
-      setNodes([...nodes, redacteredNode]);
-      setNode([]);
-      setStatus(stateMachine.REDACTERED);
+      setNodes([...nodes, form])
       setIsopen({ redacteredForm: false });
-      setForm({ name: '', date: time, text: '', isEdit: true });
-      return setFilter('');
+      return setStatus(stateMachine.REDACTERED);
     }
-    return alert(`${e.name} is already in list`);
+    return alert(`${form.name} is already in list`);
   }
   const onChangeFilter = (value) => {
     setFilter(value);
@@ -110,11 +124,11 @@ export const App = () => {
   const onClose = (e) => {
     setIsopen({ redacteredForm: false });
   }
-  // const onClickCancel = (e) => {
-  //   setIsopen({ redacteredForm: false });
-  // }
   return (
     <>
+      <Context.Provider value={{ handleOk, handleCancel, isModalOpen }}>
+        <DeleteModal />
+      </Context.Provider>
       <Context.Provider value={{ filter, onChangeFilter }}>
         <HeaderLayout />
       </Context.Provider>

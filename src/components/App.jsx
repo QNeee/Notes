@@ -111,7 +111,8 @@ export const App = () => {
       nodes.splice(index, 1);
       setNodes([...nodes, form])
       setIsopen({ redacteredForm: false });
-      return setStatus(stateMachine.REDACTERED);
+      setStatus(stateMachine.REDACTERED);
+      return setNode([]);
     }
     return alert(`${form.name} is already in list`);
   }

@@ -18,8 +18,9 @@ export const App = () => {
     DELETE: 'delete',
     EDITED: "edited"
   }
+  const addLeadingZero = (value) => String(value).padStart(2, '0');
   const date = new Date();
-  const time = (date.getHours() + ':' + date.getMinutes());
+  const time = (addLeadingZero(date.getHours()) + ':' + addLeadingZero(date.getMinutes()));
   const [status, setStatus] = useState('');
   const [nodes, setNodes] = useState([]);
   const [node, setNode] = useState([]);

@@ -25,7 +25,7 @@ export const App = () => {
   const [nodes, setNodes] = useState([]);
   const [node, setNode] = useState([]);
   const [filter, setFilter] = useState('');
-  const [form, setForm] = useState({ id: '', name: '', date: time, text: '', isEdit: false });
+  const [form, setForm] = useState({ id: '', name: '', date: '', text: '', isEdit: false });
   const [modalHeader, setModalHeader] = useState({ isToggle: false });
   const [isOpen, setIsopen] = useState({ redacteredForm: false });
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -73,7 +73,7 @@ export const App = () => {
     const newNode = {
       id: nanoid(),
       name: form.name,
-      date: form.date,
+      date: date.toLocaleString('en-GB'),
       text: form.text,
       isEdit: false,
     }
@@ -102,7 +102,7 @@ export const App = () => {
     const nodeToEditId = node.map(item => item.id).join("");
     const nodeToEdit = {
       id: nodeToEditId,
-      date: form.date,
+      date: date.toLocaleString('en-GB'),
       name: nodeToEditName,
       text: nodeToEditText,
       isEdit: true,
